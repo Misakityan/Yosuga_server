@@ -22,18 +22,18 @@ def get_asr():
     """获取或创建ASR实例（单例）"""
     global _asr_instance
     if _asr_instance is None:
-        logger.info("🚀 初始化ASR服务...")
+        logger.info("初始化ASR服务...")
         _asr_instance = create_asr(
             ASRConfig(
                 model_name="deepdml/faster-whisper-large-v3-turbo-ct2",
                 device="auto",
-                compute_type="int8_float16",
+                compute_type="int8_float16",    # 如果你是gtx老卡，换成float32
                 cache_dir=Path("asr_models/faster_whisper_large_v3_ct2"),
                 beam_size=1,        # 贪婪搜索，速度最快
                 vad_filter=True,    # 过滤静音，节省30%时间
             )
         )
-        logger.info("✅ ASR服务初始化完成")
+        logger.info("ASR服务初始化完成")
     return _asr_instance
 
 @app.on_event("startup")
@@ -47,7 +47,7 @@ async def shutdown_event():
     global _asr_instance
     if _asr_instance:
         _asr_instance.shutdown()
-        logger.info("🛑 ASR服务已关闭")
+        logger.info("ASR服务已关闭")
 
 @app.post("/transcribe", response_class=JSONResponse)
 async def transcribe_audio(
@@ -63,7 +63,7 @@ async def transcribe_audio(
     
     # 验证文件类型
     if file.content_type and not file.content_type.startswith("audio/"):
-        raise HTTPException(status_code=400, detail="❌ 请上传音频文件 (MIME类型: audio/*)")
+        raise HTTPException(status_code=400, detail="请上传音频文件 (MIME类型: audio/*)")
     
     try:
         # 创建临时文件
@@ -72,7 +72,7 @@ async def transcribe_audio(
             tmp_file.write(content)
             tmp_path = Path(tmp_file.name)
         
-        logger.info(f"📥 接收文件: {file.filename} ({len(content)} bytes)")
+        logger.info(f"接收文件: {file.filename} ({len(content)} bytes)")
         
         # 调用ASR识别
         asr = get_asr()
@@ -83,7 +83,7 @@ async def transcribe_audio(
         
         processing_time = time.time() - start_time
         
-        logger.info(f"✅ 识别完成: {language} | {len(text)}字符 | 置信度:{confidence:.2f} | 耗时:{processing_time:.3f}s")
+        logger.info(f"识别完成: {language} | {len(text)}字符 | 置信度:{confidence:.2f} | 耗时:{processing_time:.3f}s")
         
         return {
             "success": True,
@@ -96,7 +96,7 @@ async def transcribe_audio(
         }
         
     except Exception as e:
-        logger.error(f"❌ 识别失败: {e}")
+        logger.error(f"识别失败: {e}")
         raise HTTPException(status_code=500, detail=f"识别失败: {str(e)}")
 
 @app.get("/health")

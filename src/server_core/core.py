@@ -221,7 +221,7 @@ class YosugaServerCore:
                         media_type="wav"
                 ):
                     chunk_count += 1
-                    print(f"🎵 收到音频块 #{chunk_count}: {len(chunk.audio_data)} bytes")
+                    # print(f"🎵 收到音频块 #{chunk_count}: {len(chunk.audio_data)} bytes")
                     if chunk_count == 1:    # 如果是第一个音频块
                         # 构造音频首包发送给客户端
                         await self.audio_dto.send_audio_data(

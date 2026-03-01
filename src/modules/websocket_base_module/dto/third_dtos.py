@@ -110,7 +110,7 @@ class AudioDataDTO:
         # 序列化为JSON并发送 自动处理base64和type字段
         json_message = self.audio_data.to_json()
         await self.json_dto.send_json(json_message)
-        logger.info(f"音频已发送: sequence={sequence}, 大小={len(data)} bytes")
+        # logger.info(f"音频已发送: sequence={sequence}, 大小={len(data)} bytes")
 
     # 业务接收接口
     def register_audio_callback(

@@ -77,10 +77,10 @@ class WebSocketServer:
         """发送JSON数据（唯一客户端）"""
         if self._websocket:
             try:
-                logger.debug(f"准备发送JSON数据: {data}")
+                # logger.debug(f"准备发送JSON数据: {data}")
                 message = json.dumps(data)
                 await self._websocket.send(message)
-                logger.trace(f"JSON数据已发送: {data}")
+                # logger.trace(f"JSON数据已发送: {data}")
             except Exception as e:
                 logger.error(f"JSON数据发送失败: {e}")
                 raise
