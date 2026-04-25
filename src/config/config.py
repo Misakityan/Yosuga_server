@@ -29,7 +29,7 @@ class AIConfig:
     model_name: str = "qwen/qwen3-4b-2507"
     timeout: int = 30
     temperature: float = 0.4
-    max_tokens: int = 8192
+    max_tokens: int = 4096
 
 
 @dataclass
@@ -98,12 +98,22 @@ class AppConfig:
         # 基础字段
         self.version = version
         self.debug = debug
-        self.ai = ai if ai is not None else AIConfig()
-        self.tts = tts if tts is not None else TTSConfig()
-        self.asr = asr if asr is not None else ASRConfig()
-        self.auto_agent = auto_agent if auto_agent is not None else AutoAgentConfig()
-        self.llm_core = llm_core if llm_core is not None else LLMConfig()
-        self.paths = paths if paths is not None else PathsConfig()
+
+        # self.ai = ai if ai is not None else AIConfig()
+        # self.tts = tts if tts is not None else TTSConfig()
+        # self.asr = asr if asr is not None else ASRConfig()
+        # self.auto_agent = auto_agent if auto_agent is not None else AutoAgentConfig()
+        # self.llm_core = llm_core if llm_core is not None else LLMConfig()
+        # self.paths = paths if paths is not None else PathsConfig()
+
+        # 如果是字典则转换，否则使用默认值
+        self.ai = AIConfig(**ai) if isinstance(ai, dict) else (ai or AIConfig())
+        self.tts = TTSConfig(**tts) if isinstance(tts, dict) else (tts or TTSConfig())
+        self.asr = ASRConfig(**asr) if isinstance(asr, dict) else (asr or ASRConfig())
+        self.auto_agent = AutoAgentConfig(**auto_agent) if isinstance(auto_agent, dict) else (
+                    auto_agent or AutoAgentConfig())
+        self.llm_core = LLMConfig(**llm_core) if isinstance(llm_core, dict) else (llm_core or LLMConfig())
+        self.paths = PathsConfig(**paths) if isinstance(paths, dict) else (paths or PathsConfig())
 
         # 内部状态（非 dataclass 字段，不会被序列化）
         self._config_path = _config_path
@@ -395,6 +405,12 @@ class _LazyConfig:
     def using_dir(self) -> Path:
         return _ensure_initialized().using_dir
 
+def ensure_config_initialized():
+    """
+    强制立即初始化配置（用于多线程环境）
+    返回真正的 AppConfig 实例而非代理
+    """
+    return _ensure_initialized()
 
 # 全局配置对象：导入即用，自动初始化
 cfg: AppConfig = _LazyConfig()  # type: ignore

@@ -60,7 +60,7 @@ class TokenManager:
         )
 
     def _get_tokenizer(self, model_name: str) -> tiktoken.Encoding:
-        """获取 tokenizer（与之前实现相同，省略重复代码）"""
+        """获取 tokenizer"""
         model_tokenizer_map = {
             "qwen": "gpt-3.5-turbo",
             "llama": "gpt-3.5-turbo",
@@ -178,7 +178,7 @@ class TokenManager:
         )
 
     def count_text_tokens(self, text: str) -> int:
-        """计算单段文本的 token 数量（与之前相同）"""
+        """计算单段文本的 token 数量"""
         if not isinstance(text, str) or not text:
             return 0
         return len(self.tokenizer.encode(text))
@@ -188,7 +188,7 @@ class TokenManager:
             messages: List[Any],
             tokens_per_message: int = 3
     ) -> int:
-        """计算消息列表的总 token 数量（与之前相同，优化实现）"""
+        """计算消息列表的总 token 数量"""
         if not messages:
             return 0
 
@@ -311,7 +311,7 @@ class TokenManager:
             )
 
     def get_tokenizer_info(self) -> TokenizerInfo:
-        """获取当前 tokenizer 的详细信息（与之前相同）"""
+        """获取当前 tokenizer 的详细信息"""
         if "cl100k_base" in self.tokenizer.name and "gpt-3.5" not in self.model_name:
             accuracy = "low"
         elif self.model_name in self.tokenizer.name:
@@ -332,7 +332,7 @@ class TokenManager:
             limit: int,
             threshold: float = 0.85
     ) -> bool:
-        """判断 token 使用量是否接近限制（与之前相同）"""
+        """判断 token 使用量是否接近限制"""
         return current_tokens > limit * threshold
 
     def calculate_chunk_size(
@@ -340,7 +340,7 @@ class TokenManager:
             available_tokens: int,
             safety_margin: float = 0.1
     ) -> int:
-        """计算安全的消息块大小（与之前相同）"""
+        """计算安全的消息块大小"""
         return int(available_tokens * (1 - safety_margin))
 
     def clear_api_usage_cache(self):

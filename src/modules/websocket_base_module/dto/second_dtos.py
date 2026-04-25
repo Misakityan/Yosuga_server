@@ -38,7 +38,9 @@ class JsonDTO(MessageDTO):
         super().__init__(ws_server)
         self.receivers : Dict[str, List[ReceiveCallback]] = {
             'audio_data' : [],      # 音频数据
-            'screenshot_data' : []  # 截图数据
+            'screenshot_data' : [], # 截图数据
+            'device_data' : [],     # 嵌入式设备数据（注册/响应/事件）
+            'device_command' : [],  # 设备控制指令（服务端→客户端）
         }
         # 注册json处理callback function
         ws_server.register_receiver('json', self._handle_json)

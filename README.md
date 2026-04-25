@@ -83,3 +83,7 @@
 本项目当前并不完善，还有很多需要优化的地方，并且尚未接入Yosuga_embedded。
 
 欢迎大家为本项目贡献代码。
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Misakityan/Yosuga_server&type=Date&t=20260202)](https://www.star-history.com/#Misakityan/Yosuga_server&Date)

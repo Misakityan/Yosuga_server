@@ -20,7 +20,7 @@ def first_test() -> None:
     """首次启动测试"""
     time.sleep(5)   # 给服务器一些启动时间
     # 构造一个测试请求以验证初始化模型加载成功
-    logger.info("🚀 测试模型是否加载成功...")
+    logger.info("测试模型是否加载成功...")
     import requests
     from pathlib import Path
     url = "http://localhost:20260/transcribe"
@@ -52,7 +52,7 @@ def first_test() -> None:
         logger.error(f"测试过程中发生错误: {e}")
 
 if __name__ == "__main__":
-    logger.info("🚀 启动 ASR API 服务...")
+    logger.info("启动 ASR API 服务...")
 
     # 在后台线程启动服务器
     server_thread = threading.Thread(target=start_server, daemon=True)

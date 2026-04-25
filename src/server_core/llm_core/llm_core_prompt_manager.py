@@ -9,8 +9,10 @@ from pydantic import BaseModel, Field, field_validator
 from typing import Callable, List, Optional, Coroutine, Any, ClassVar, Dict
 from src.server_core.llm_core.llm_core_prompts import YOSUGA_SYSTEM_PROMPT_SCH
 
+
 class LLMCorePromptBase(BaseModel, ABC):
     """LLM 提示词基类：定义输入输出结构"""
+
     @abstractmethod
     def type(self) -> str:
         """返回该提示词类型的唯一标识"""
@@ -62,8 +64,10 @@ class LLMCorePromptManager(LLMCorePromptBase):
             for type_id, son in self._registry.items()
         )
 
+
 class YosugaAudioASRText(LLMCorePromptBase):
     """音频ASR文本输入场景"""
+
     def type(self) -> str:
         return "用户语音asr信息"
 
@@ -92,19 +96,50 @@ class YosugaAudioASRText(LLMCorePromptBase):
                 - `action`: 触发的动作指令，如"wave_hand"、"nod"等，"none"表示无动作
                 '''
 
+
 class YosugaEmbedded(LLMCorePromptBase):
-    """嵌入式设备输入场景"""
+    """嵌入式设备控制场景"""
+
     def type(self) -> str:
-        pass
+        return "嵌入式设备信息"
 
     def describe_input(self) -> str:
-        pass
+        return '''
+                当嵌入式设备有数据上报或客户端发来设备状态时，你会收到以下格式：
+                {
+                    "device_event": {
+                        "device_id": "设备ID",
+                        "event": "事件内容"
+                    }
+                }
+                但大多数情况下，你只需参考系统状态表中的设备函数表来决策。
+                '''
 
     def describe_output(self) -> str:
-        pass
+        return '''
+                当你需要控制嵌入式设备时，按以下JSON格式返回：
+                {
+                    "type": "固定为embedded_control",
+                    "calls": [
+                        {
+                            "method": "函数名（来自系统状态表中的设备能力表）",
+                            "params": { "参数名": 参数值 }
+                        }
+                    ],
+                    "response_text": "同时回复给用户的文本说明（可选，可留空）"
+                }
+                - `calls`: JSON-RPC 调用列表，每个调用对应一个设备函数
+                - `method`: 必须来自系统状态表中列出的可用函数名
+                - `params`: 按函数定义的参数传入，可省略无参数的调用
+                - `response_text`: 可选，若同时需要回复用户可在此填写
+                注意：仅当用户意图涉及现实世界控制时，才需要返回 embedded_control。
+                如果只是聊天，只需返回 audio_text。
+                '''
+
 
 class YosugaUITARS(LLMCorePromptBase):
     """自动化操作构建场景"""
+
     def type(self) -> str:
         return "自动化操作信息"
 
@@ -140,12 +175,14 @@ class YosugaUITARS(LLMCorePromptBase):
                 }
             自动化agent返回的操作信息不一定包括JSON的全部字段，例如某次返回只有key的内容，或者只有content的内容。
             针对自动化agent操作输入的返回，若没有相关内容可以留空相关字段，请不要省略掉任何字段名称。
-            
+
             注意：自动化agent的状态可见YosugaSystemState表。
         '''
 
+
 class YosugaLive2DControl(LLMCorePromptBase):
     """对Yosuga Live2D控制场景"""
+
     def type(self) -> str:
         return "Yosuga Live2D控制信息"
 
@@ -168,7 +205,7 @@ if __name__ == "__main__":
         OutputInfo=manager.describe_output(),
         RoleSetting="...",
         Language="ja",
-        Memory = "",
+        Memory="",
         SystemStateTable=""
     )
     print(system_prompt)

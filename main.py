@@ -41,5 +41,5 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\nYosuga服务器已停止喵~~~")
+        print("\nYosuga服务端已停止喵~~~")
     

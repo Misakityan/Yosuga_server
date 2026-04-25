@@ -49,7 +49,7 @@ class AsyncAudioPlayer:
                         # 读取PCM数据（去掉头部）
                         pcm_data = wav_file.readframes(wav_file.getnframes())
 
-                        logger.info(f"📊 解析WAV头: {self.sample_rate}Hz, {self.channels}ch, {self.sampwidth * 8}bit")
+                        logger.info(f"解析WAV头: {self.sample_rate}Hz, {self.channels}ch, {self.sampwidth * 8}bit")
 
                         # 转换为numpy数组
                         if self.sampwidth == 2:
@@ -68,7 +68,7 @@ class AsyncAudioPlayer:
 
                 except wave.Error:
                     # 可能是不完整的WAV头，尝试直接播放
-                    logger.warning("⚠️ WAV头解析失败，尝试直接播放")
+                    logger.warning("WAV头解析失败，尝试直接播放")
                     await self._play_raw(audio_data)
                     return
             else:
@@ -76,7 +76,7 @@ class AsyncAudioPlayer:
                 await self._play_raw(audio_data)
 
         except Exception as e:
-            logger.error(f"❌ 音频块处理失败: {e}")
+            logger.error(f"音频块处理失败: {e}")
 
     async def _play_raw(self, audio_data: bytes):
         """播放RAW PCM数据"""
@@ -90,11 +90,11 @@ class AsyncAudioPlayer:
 
             await self.audio_queue.put(audio_array)
         except Exception as e:
-            logger.error(f"❌ RAW音频处理失败: {e}")
+            logger.error(f"RAW音频处理失败: {e}")
 
     async def play_worker(self):
         """后台播放任务"""
-        logger.info("🎧 音频播放任务启动")
+        logger.info("音频播放任务启动")
 
         while self.is_playing or not self.audio_queue.empty():
             try:
@@ -103,7 +103,7 @@ class AsyncAudioPlayer:
 
                 # 延迟初始化音频流（直到获得第一个数据块）
                 if self.stream is None:
-                    logger.info(f"🔊 打开音频输出流: {self.sample_rate}Hz")
+                    logger.info(f"打开音频输出流: {self.sample_rate}Hz")
                     self.stream = sd.OutputStream(
                         samplerate=self.sample_rate,
                         channels=1,
@@ -122,10 +122,10 @@ class AsyncAudioPlayer:
             except asyncio.TimeoutError:
                 continue
             except Exception as e:
-                logger.error(f"❌ 播放任务异常: {e}")
+                logger.error(f"播放任务异常: {e}")
                 break
 
-        logger.info("🛑 音频播放任务结束")
+        logger.info("音频播放任务结束")
 
     async def start(self):
         """启动播放系统"""
@@ -154,7 +154,7 @@ class AsyncAudioPlayer:
             except:
                 break
 
-        logger.info("✅ 音频播放已停止")
+        logger.info("音频播放已停止")
 
     async def __aenter__(self):
         await self.start()

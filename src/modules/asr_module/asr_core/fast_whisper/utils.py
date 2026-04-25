@@ -42,4 +42,4 @@ class PerformanceProfiler:
         
         if len(self.stats) % 10 == 0:
             avg_rtf = sum(s["rtf"] for s in self.stats[-10:]) / 10
-            logger.info(f"📊 最近10次平均RTF: {avg_rtf:.3f}")
+            logger.info(f"最近10次平均RTF: {avg_rtf:.3f}")

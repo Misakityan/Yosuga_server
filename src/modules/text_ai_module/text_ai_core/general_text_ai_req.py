@@ -234,7 +234,7 @@ class OpenAIClient(BaseLLMClient):
 
     def _normal_chat_completion(self, params):
         """非流式响应处理"""
-        logger.info("📡 发送非流式请求...")
+        logger.info("发送非流式请求...")
         response = self.client.chat.completions.create(**params)
         raw_usage = response.usage
         normalized_usage = normalize_usage(
@@ -251,7 +251,7 @@ class OpenAIClient(BaseLLMClient):
 
     def _stream_chat_completion(self, params):
         """流式响应处理"""
-        logger.info("📡 发送流式请求...")
+        logger.info("发送流式请求...")
         response_stream = self.client.chat.completions.create(**params)
 
         full_content = ""

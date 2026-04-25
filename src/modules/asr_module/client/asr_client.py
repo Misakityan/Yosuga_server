@@ -82,7 +82,7 @@ class ASRClientSync:
         if not file_path.exists():
             raise FileNotFoundError(f"文件不存在: {file_path}")
 
-        logger.info(f"📤 上传文件: {file_path.name}")
+        logger.info(f"上传文件: {file_path.name}")
 
         with open(file_path, 'rb') as f:
             files = {'file': (file_path.name, f, 'audio/wav')}
@@ -106,7 +106,7 @@ class ASRClientSync:
                 audio_bytes = f.read()
             result = client.transcribe_bytes(audio_bytes)
         """
-        logger.info(f"📤 上传字节流 ({len(audio_data)} bytes)")
+        logger.info(f"上传字节流 ({len(audio_data)} bytes)")
 
         files = {'file': (filename, audio_data, 'audio/wav')}
         result = self._request('POST', '/transcribe', files=files)
@@ -171,7 +171,7 @@ class ASRClientAsync:
         if not file_path.exists():
             raise FileNotFoundError(f"文件不存在: {file_path}")
 
-        logger.info(f"📤 上传文件: {file_path.name}")
+        logger.info(f"上传文件: {file_path.name}")
 
         async with aiofiles.open(file_path, 'rb') as f:
             audio_data = await f.read()
@@ -180,7 +180,7 @@ class ASRClientAsync:
 
     async def transcribe_bytes(self, audio_data: bytes, filename: str = "audio.wav") -> ASRResponse:
         """异步转录音频字节流"""
-        logger.info(f"📤 上传字节流 ({len(audio_data)} bytes)")
+        logger.info(f"上传字节流 ({len(audio_data)} bytes)")
         await self._ensure_session()    # 确保session已创建
         form = aiohttp.FormData()       # 创建表单数据
         form.add_field('file', audio_data, filename=filename, content_type='audio/wav') # 添加文件字段

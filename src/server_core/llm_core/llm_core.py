@@ -17,6 +17,7 @@ from src.modules.text_ai_module.text_ai_core.general_text_ai_req import (
 )
 from src.server_core.llm_core.llm_core_analysis import (
     LLMCoreAnalysisManager, LLMCoreAnalysisBase, YosugaAudioResponseData, YosugaUITARSResponseData, YosugaUITARSRequestData
+    , YosugaEmbeddedResponseData
 )
 from src.server_core.llm_core.llm_core_dispatcher import LLMCoreActionDispatcher
 from src.server_core.llm_core.llm_core_prompt_manager import (

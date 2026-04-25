@@ -1,0 +1,17 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# from ide
+.vscode
+.idea
+
+# Virtual environments
+.venv
+venv
+
+user_preferences.json

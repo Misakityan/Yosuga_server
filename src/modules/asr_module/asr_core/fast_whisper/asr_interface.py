@@ -39,7 +39,7 @@ class ASRInterface:
         self.sample_rate = 16000
         
         self._initialized = True
-        logger.info("🎤 ASR接口初始化完成")
+        logger.info("ASR接口初始化完成")
     
     @classmethod
     def get_instance(cls, config: Optional[ASRConfig] = None) -> 'ASRInterface':
@@ -68,7 +68,7 @@ class ASRInterface:
             import time
             start_time = time.time()
             
-            logger.info(f"🎵 开始识别: {wav_path.name}")
+            logger.info(f"开始识别: {wav_path.name}")
             
             # 执行识别...
             audio = self._load_audio(wav_path)
@@ -78,14 +78,14 @@ class ASRInterface:
             # 计算耗时
             processing_time = time.time() - start_time
             logger.info(
-                f"✅ 识别完成: {lang} | {len(text)}字符 | 置信度:{confidence:.2f} | "
+                f"识别完成: {lang} | {len(text)}字符 | 置信度:{confidence:.2f} | "
                 f"耗时:{processing_time:.3f}s | RTF:{processing_time/(len(audio)/self.sample_rate):.3f}"
             )
             
             return text, lang, confidence
             
         except Exception as e:
-            logger.error(f"❌ 识别失败 {wav_path}: {e}")
+            logger.error(f"识别失败 {wav_path}: {e}")
             raise RuntimeError(f"Transcription failed: {e}")
     
     def _load_audio(self, wav_path: Path) -> numpy.ndarray:
@@ -180,5 +180,5 @@ class ASRInterface:
     
     def shutdown(self):
         """优雅关闭"""
-        logger.info("🛑 关闭ASR接口...")
+        logger.info("关闭ASR接口...")
         self.model_manager.unload()

@@ -34,8 +34,8 @@ class ModelManager:
     
     def _load_model(self):
         """加载模型"""
-        logger.info(f"🚀 初始化模型: {self.config.model_name}")
-        logger.info(f"📦 设备: {self.config.device}, 计算类型: {self.config.compute_type}")
+        logger.info(f"初始化模型: {self.config.model_name}")
+        logger.info(f"设备: {self.config.device}, 计算类型: {self.config.compute_type}")
         
         try:
             self._model = WhisperModel(
@@ -52,15 +52,15 @@ class ModelManager:
                 "model_size": self.config.model_name.split("-")[-2]
             }
             
-            logger.info("✅ 模型加载成功")
+            logger.info("模型加载成功")
             
         except Exception as e:
-            logger.error(f"❌ 模型加载失败: {e}")
+            logger.error(f"模型加载失败: {e}")
             raise RuntimeError(f"Failed to load ASR model: {e}")
     
     def reload(self, new_config: ASRConfig):
         """热重载模型"""
-        logger.info("🔄 热重载模型...")
+        logger.info("热重载模型...")
         self.unload()
         self.config = new_config
         self._load_model()
@@ -68,7 +68,7 @@ class ModelManager:
     def unload(self):
         """卸载模型释放资源"""
         if self._model is not None:
-            logger.info("🗑️ 卸载模型...")
+            logger.info("卸载模型...")
             del self._model
             self._model = None
             
@@ -77,7 +77,7 @@ class ModelManager:
             
             gc.collect()
             
-            logger.info("✅ 模型已卸载")
+            logger.info("模型已卸载")
     
     def get_device_info(self) -> dict:
         """获取设备信息"""

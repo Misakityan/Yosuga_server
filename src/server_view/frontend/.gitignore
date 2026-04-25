@@ -1,0 +1,21 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# from ide
+.vscode
+.idea
+
+# Virtual environments
+.venv
+venv
+
+node_modules
+node_modules/
+dist
+dist/
+pnpm-lock.yaml

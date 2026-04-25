@@ -249,17 +249,24 @@ class YosugaLive2DResponseData(LLMCoreAnalysisBase):
 
 class YosugaEmbeddedResponseData(LLMCoreAnalysisBase):
     """
-    嵌入式设备场景的LLM输出数据模型   TODO
+    嵌入式设备场景的LLM输出数据模型
+    LLM输出 JSON-RPC 风格的函数调用，由服务端解析并路由到对应设备
     """
 
     type: str = Field(default="embedded_control", description="固定为embedded_control")
-    device_id: str = Field(..., description="设备ID")
-    command: str = Field(..., description="控制指令")
-    params: Optional[Dict[str, Any]] = Field(default=None, description="参数")
+    calls: list[dict] = Field(default_factory=list, description="JSON-RPC 调用列表，每项含 method/params/id")
+    response_text: str = Field(default="", description="同时回复给用户的文本（可选）")
 
     @classmethod
     def type_(cls) -> str:
         return "embedded_control"
+
+    def to_dict(self) -> dict:
+        return {
+            "type": self.type,
+            "calls": self.calls,
+            "response_text": self.response_text
+        }
 
 # 使用示例
 if __name__ == "__main__":
